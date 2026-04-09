@@ -6,7 +6,7 @@
 :root.dark {
   --color-canvas:         var(--neutral-05);
   --color-surface:        var(--neutral-10);
-  --color-surface-raised: var(--neutral-20);
+  --color-surface-raised: var(--neutral-25);
   --color-surface-sunken: var(--neutral-03);
 
   --color-text:           var(--neutral-95);
@@ -29,4 +29,8 @@
   --color-danger-subtle:  oklch(0.22 0.08 25);
 
   --color-focus: var(--brand-70);
+
+  --shadow-sm: 0 2px 6px  oklch(0 0 0 / 0.60);
+  --shadow-md: 0 4px 12px oklch(0 0 0 / 0.70), 0 2px 4px oklch(0 0 0 / 0.60);
+  --shadow-lg: 0 12px 32px oklch(0 0 0 / 0.70), 0 6px 12px oklch(0 0 0 / 0.60);
 }

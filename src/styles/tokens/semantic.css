@@ -12,7 +12,7 @@
   /* Surfaces */
   --color-canvas:         var(--neutral-98);
   --color-surface:        var(--neutral-95);
-  --color-surface-raised: oklch(1 0 0);
+  --color-surface-raised: var(--neutral-100);
   --color-surface-sunken: var(--neutral-90);
 
   /* Text */
@@ -39,6 +39,11 @@
   --color-danger-subtle:  var(--red-90);
 
   --color-focus: var(--brand-60);
+
+  /* ── Shadow scale — two-step like colors: dark mode overrides these ────── */
+  --shadow-sm: 0 1px 2px oklch(0 0 0 / 0.06);
+  --shadow-md: 0 1px 3px oklch(0 0 0 / 0.10), 0 1px 2px oklch(0 0 0 / 0.06);
+  --shadow-lg: 0 4px 6px oklch(0 0 0 / 0.10), 0 2px 4px oklch(0 0 0 / 0.06);
 
   /* ── Fluid type scale ──────────────────────────────────────────────────── */
   --text-xs:   clamp(0.6875rem, 0.65rem + 0.2vw,  0.75rem);
@@ -116,4 +121,8 @@
   --radius-none: initial;
   --radius-2xl:  initial;
   --radius-3xl:  initial;
+
+  --shadow-sm: var(--shadow-sm);
+  --shadow-md: var(--shadow-md);
+  --shadow-lg: var(--shadow-lg);
 }

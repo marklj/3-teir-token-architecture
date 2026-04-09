@@ -146,6 +146,59 @@ export default function App() {
             </Card>
           </div>
 
+          <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 mt-4">
+            <Card>
+              <h3
+                className="font-semibold uppercase tracking-wide text-xs text-text-muted"
+                style={{ marginBottom: 'var(--spacing-md)' }}
+              >
+                Border radius scale
+              </h3>
+              <div className="space-y-2">
+                {[
+                  '--radius-sm',
+                  '--radius-md',
+                  '--radius-lg',
+                  '--radius-xl',
+                  '--radius-full',
+                ].map(token => (
+                  <div key={token} className="flex items-center gap-3">
+                    <div
+                      className="h-8 w-16 bg-interactive shrink-0"
+                      style={{ borderRadius: `var(${token})` }}
+                    />
+                    <code className="text-xs text-text-muted">{token}</code>
+                  </div>
+                ))}
+              </div>
+            </Card>
+
+            <Card>
+              <h3
+                className="font-semibold uppercase tracking-wide text-xs text-text-muted"
+                style={{ marginBottom: 'var(--spacing-md)' }}
+              >
+                Shadow scale
+              </h3>
+              <div className="space-y-5">
+                {['sm', 'md', 'lg'].map(size => (
+                  <div key={size} className="flex items-center gap-4">
+                    <div
+                      className="h-10 w-16 rounded-md bg-surface-raised shrink-0"
+                      style={{ boxShadow: `var(--shadow-${size})` }}
+                    />
+                    <code className="text-xs text-text-muted">--shadow-{size}</code>
+                  </div>
+                ))}
+              </div>
+              <div className="mt-3 pt-3 border-t border-border">
+                <code className="text-xs text-text-muted">
+                  two-step — :root.dark overrides to high-opacity
+                </code>
+              </div>
+            </Card>
+          </div>
+
           <Card className="mt-4">
             <h3
               className="font-semibold uppercase tracking-wide text-xs text-text-muted"
@@ -336,10 +389,27 @@ export default function App() {
               <code className="bg-surface-sunken text-xs px-1 rounded">bg-interactive</code>
               {' '}resolves at runtime
             </h3>
+            <p className="text-xs text-text-muted" style={{ marginBottom: 'var(--spacing-sm)' }}>
+              Color — three tiers, two-step required:
+            </p>
+            <div className="flex flex-col gap-1" style={{ marginBottom: 'var(--spacing-md)' }}>
+              <TokenLabel tier={3} name=".bg-interactive { background: var(--color-interactive) }"     description="Tailwind utility — reads the var at runtime" />
+              <TokenLabel tier={2} name="--color-interactive: var(--brand-60)"                         description="Semantic — dark mode and brand override this layer" />
+              <TokenLabel tier={1} name="--brand-60: oklch(0.60 var(--brand-chroma) var(--brand-hue))" description="Primitive — the raw perceptual value" />
+            </div>
+            <p className="text-xs text-text-muted" style={{ marginBottom: 'var(--spacing-sm)' }}>
+              Shadow — two tiers, two-step required (changes at runtime):
+            </p>
+            <div className="flex flex-col gap-1" style={{ marginBottom: 'var(--spacing-md)' }}>
+              <TokenLabel tier={3} name=".shadow-md { box-shadow: var(--shadow-md) }"                  description="Tailwind utility — reads the var at runtime" />
+              <TokenLabel tier={2} name="--shadow-md: 0 1px 3px oklch(0 0 0 / 0.10)..."               description="Semantic — :root.dark overrides to high-opacity shadows" />
+            </div>
+            <p className="text-xs text-text-muted" style={{ marginBottom: 'var(--spacing-sm)' }}>
+              Radius — two tiers, no semantic layer needed (static):
+            </p>
             <div className="flex flex-col gap-1">
-              <TokenLabel tier={3} name=".bg-interactive { background: var(--color-interactive) }" description="Tailwind utility — @theme inline makes it reference the var" />
-              <TokenLabel tier={2} name="--color-interactive: var(--brand-60)"                     description="Semantic token maps to a primitive" />
-              <TokenLabel tier={1} name="--brand-60: oklch(0.60 var(--brand-chroma) var(--brand-hue))" description="Primitive resolves to a perceptual oklch value" />
+              <TokenLabel tier={3} name=".rounded-lg { border-radius: var(--radius-lg) }"             description="Tailwind utility — @theme inline overrides Tailwind's default" />
+              <TokenLabel tier={1} name="--radius-lg: 0.75rem"                                         description="Primitive — doesn't change at runtime, no semantic alias needed" />
             </div>
           </Card>
         </Section>
