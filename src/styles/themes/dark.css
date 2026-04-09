@@ -7,7 +7,7 @@
   --color-canvas:         var(--neutral-05);
   --color-surface:        var(--neutral-10);
   --color-surface-raised: var(--neutral-20);
-  --color-surface-sunken: oklch(0.08 0.010 var(--brand-hue));
+  --color-surface-sunken: var(--neutral-03);
 
   --color-text:           var(--neutral-95);
   --color-text-muted:     var(--neutral-70);

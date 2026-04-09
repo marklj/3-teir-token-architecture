@@ -104,4 +104,16 @@
   --spacing-xl:      var(--spacing-xl);
   --spacing-2xl:     var(--spacing-2xl);
   --spacing-section: var(--spacing-section);
+
+  --radius-sm:   var(--radius-sm);
+  --radius-md:   var(--radius-md);
+  --radius-lg:   var(--radius-lg);
+  --radius-xl:   var(--radius-xl);
+  --radius-full: var(--radius-full);
+
+  /* Clear Tailwind's radius defaults that fall outside our scale */
+  --radius:      initial;
+  --radius-none: initial;
+  --radius-2xl:  initial;
+  --radius-3xl:  initial;
 }

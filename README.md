@@ -1,6 +1,6 @@
 # Three-Tier Token Architecture
 
-A React + Vite demo exploring a scalable CSS design token system built on **Tailwind 4**, **oklch perceptual color**, and **fluid type/spacing**. It demonstrates class-based dark mode and multi-brand theming entirely in CSS — no CSS-in-JS, no runtime color calculations.
+A React + Vite demo of a scalable CSS design token system built on **Tailwind 4**, **oklch perceptual color**, and **fluid type/spacing**. Demonstrates class-based dark mode and multi-brand theming entirely in CSS — no CSS-in-JS, no runtime color calculations.
 
 ## Core Concept
 
@@ -8,59 +8,82 @@ Design tokens are organized into three tiers, each with a distinct responsibilit
 
 ```
 Tier 1: Primitives  →  Tier 2: Semantic tokens  →  Tier 3: Tailwind utilities
-raw oklch values        purpose-named vars            generated from @theme inline
+raw values              purpose-named vars            generated from @theme inline
 never in HTML           override for dark/brand        live var() references
 ```
 
 ### Tier 1 — Primitives (`src/styles/tokens/primitives.css`)
 
-Raw `oklch` values. Never referenced in HTML markup. Two driver variables — `--brand-hue` and `--brand-chroma` — power the entire brand scale perceptually:
+Raw values. Never referenced in HTML markup. Includes:
 
-```css
---brand-60: oklch(0.60 var(--brand-chroma) var(--brand-hue));
---neutral-95: oklch(0.96 0.003 var(--brand-hue));
-```
+- **Brand scale** — `--brand-10` through `--brand-95`, derived from two driver vars:
+  ```css
+  --brand-hue: 25;
+  --brand-chroma: 0.26;
+  --brand-60: oklch(0.60 var(--brand-chroma) var(--brand-hue));
+  ```
+  Changing `--brand-hue` shifts the entire brand palette perceptually and uniformly.
 
-Changing `--brand-hue` shifts every brand-derived color simultaneously while maintaining consistent perceptual lightness and contrast.
+- **Neutral scale** — `--neutral-03` through `--neutral-98`, low-chroma and brand-hue tinted for harmony.
+
+- **Named brand primitives** — `--red-hue`, `--emerald-hue`, etc. let you reference a specific brand's color directly without a `[data-brand]` scope:
+  ```css
+  oklch(0.60 var(--emerald-chroma) var(--emerald-hue))
+  ```
+
+- **Status primitives** — fixed-hue greens, ambers, reds independent of the brand scale.
+
+- **Shadow scale** — `--shadow-sm`, `--shadow-md`, `--shadow-lg`.
+
+- **Border radius scale** — `--radius-sm` through `--radius-full`.
+
+- **Fluid type scale** — `--text-xs` through `--text-5xl` using `clamp()`.
+
+- **Fluid spacing scale** — `--spacing-xs` through `--spacing-section` using `clamp()`.
 
 ### Tier 2 — Semantic tokens (`src/styles/tokens/semantic.css`)
 
-Purpose-named tokens that map primitives to roles. Dark mode and brand theming only touch this layer — HTML never changes:
+Purpose-named tokens that map primitives to roles. Dark mode and brand theming only reassign values here — HTML never changes.
+
+The **two-step `@theme inline` pattern** bridges Tier 2 to Tailwind utilities:
 
 ```css
+/* Step 1 — define in :root so dark mode and brand scopes can override */
 :root {
-  --color-canvas:      var(--neutral-98);
   --color-interactive: var(--brand-60);
 }
-```
 
-The `@theme inline` self-reference pattern bridges Tier 2 to Tailwind utilities:
-
-```css
+/* Step 2 — self-reference in @theme inline so Tailwind generates a
+   utility that reads the var at runtime, not baked at build time */
 @theme inline {
-  --color-canvas:      var(--color-canvas);      /* generates bg-color-canvas */
-  --color-interactive: var(--color-interactive); /* generates bg-interactive  */
+  --color-interactive: var(--color-interactive);
 }
 ```
 
-This generates utilities that emit `var(--color-canvas)` rather than baking the resolved value. Without `inline`, Tailwind would bake the primitive at build time and dark mode overrides would have no effect on utility classes.
+This generates `.bg-interactive { background: var(--color-interactive) }` — a live reference that responds to dark mode and brand overrides.
 
-### Tier 3 — Tailwind utilities
+> Collapsing this to a single `@theme inline` block bakes the primitive value into the utility at build time, breaking dark mode.
 
-Generated automatically from the `@theme inline` block. Because the utilities reference CSS vars rather than static values, they stay live at runtime:
+Type and spacing tokens also appear in `@theme inline` for utility generation, but they could use plain `@theme` — they never get reassigned at runtime.
+
+### Tier 3 — Tailwind utilities + component classes
+
+**Utilities** are generated from the `@theme inline` bridge. Because they reference CSS vars rather than static values, they stay live at runtime:
 
 ```
 .bg-interactive { background: var(--color-interactive) }
-                                        ↓ resolves at runtime
-                      oklch(0.60 var(--brand-chroma) var(--brand-hue))
-                                        ↓
-                          oklch(0.60 0.26 25)  ← red brand, light mode
-                          oklch(0.70 0.26 25)  ← red brand, dark mode
+                                       ↓ resolves at runtime
+                     oklch(0.60 var(--brand-chroma) var(--brand-hue))
+                                       ↓
+                         oklch(0.60 0.26 25)  ← red brand, light mode
+                         oklch(0.70 0.26 25)  ← red brand, dark mode
 ```
+
+**Component classes** (`.card`, `.btn-primary`, `.btn-ghost`, `.badge`) are defined in `@layer components` — one CSS file per component, colocated and self-imported. Because they're in a named layer, utility classes in markup always override them.
 
 ## Dark Mode
 
-Implemented with a single class on `<html>` — no media query in CSS:
+Class-based only — no `prefers-color-scheme` media query in CSS. This ensures the demo toggle works regardless of OS setting:
 
 ```css
 :root.dark {
@@ -69,35 +92,28 @@ Implemented with a single class on `<html>` — no media query in CSS:
 }
 ```
 
-`:root.dark` has specificity `(0,2,0)` vs `:root` at `(0,1,0)`, so dark overrides reliably win without cascade hacks. Class-only theming (rather than relying on `prefers-color-scheme`) means the demo toggle works regardless of OS setting:
+`:root.dark` has specificity `(0,2,0)` vs `:root` at `(0,1,0)`, so dark overrides reliably win. The toggle sets the class via `useEffect`:
 
 ```js
-useEffect(() => {
-  document.documentElement.classList.toggle('dark', darkMode)
-}, [darkMode])
+document.documentElement.classList.toggle('dark', darkMode)
 ```
 
 ## Multi-Brand Theming
 
-Each brand defines named hue/chroma primitives in `:root`, which the `[data-brand]` rules then assign to the driver vars:
+Each brand has named hue/chroma primitives in `primitives.css`. The `[data-brand]` rules in `brands.css` assign them to the driver vars when a brand scope is active:
 
 ```css
-:root {
-  --emerald-hue: 160;  --emerald-chroma: 0.18;
-}
+/* primitives.css */
+--emerald-hue: 160;  --emerald-chroma: 0.18;
 
+/* brands.css */
 [data-brand="emerald"] {
   --brand-hue: var(--emerald-hue);
   --brand-chroma: var(--emerald-chroma);
 }
 ```
 
-Setting `data-brand` on `<html>` cascades through every element. Named vars also allow direct color previews without needing a scoped `data-brand` attribute:
-
-```jsx
-// Preview any brand's color without data-brand scope:
-style={{ background: `oklch(0.60 var(--${brand}-chroma) var(--${brand}-hue))` }}
-```
+Setting `data-brand` on `<html>` cascades through every element. Because `--brand-hue` and `--brand-chroma` drive the entire brand scale via `calc()` and `oklch()`, the whole palette shifts with two variable changes.
 
 ## Fluid Type & Spacing
 
@@ -112,17 +128,35 @@ All type and spacing tokens use `clamp()` — they scale smoothly between viewpo
 
 ```
 src/
-├── index.css                      Entry point; imports all layers in order
-├── App.jsx                        Demo UI; brand/dark state on <html>
-└── styles/
-    ├── tokens/
-    │   ├── primitives.css         Tier 1: raw oklch values
-    │   └── semantic.css           Tier 2: purpose tokens + @theme inline bridge
-    ├── themes/
-    │   ├── dark.css               :root.dark overrides
-    │   └── brands.css             Named hue/chroma vars + [data-brand] rules
-    └── components.css             @layer components, @utility, @variant
+├── index.css                        Entry point; imports token layers and utilities
+├── App.jsx                          Demo UI; brand/dark state managed on <html>
+├── styles/
+│   ├── tokens/
+│   │   ├── primitives.css           Tier 1: raw values (color, radius, shadow, type, spacing)
+│   │   └── semantic.css             Tier 2: purpose tokens + @theme inline bridge
+│   ├── themes/
+│   │   ├── dark.css                 :root.dark overrides
+│   │   └── brands.css               [data-brand] rules
+│   └── utilities.css                @variant and @utility definitions
+└── components/
+    ├── Button/
+    │   ├── Button.css               @layer components { .btn-primary, .btn-ghost }
+    │   └── Button.jsx               imports ./Button.css
+    ├── Badge/
+    │   ├── Badge.css                @layer components { .badge }
+    │   └── Badge.jsx                imports ./Badge.css
+    ├── Card/
+    │   ├── Card.css                 @layer components { .card }
+    │   └── Card.jsx                 imports ./Card.css, supports `as` prop
+    ├── TierCard/
+    │   └── TierCard.jsx             composes <Card> and <Badge> — no new CSS class
+    ├── Section/
+    │   └── Section.jsx              utility classes only — no CSS file
+    └── TokenLabel/
+        └── TokenLabel.jsx           composes <Badge> — no CSS file
 ```
+
+A CSS file exists alongside a component only when that component introduces a new `@layer components` class. Components that compose existing classes don't need one. Adding a new component never requires touching `index.css`.
 
 ## Getting Started
 
@@ -131,7 +165,7 @@ npm install
 npm run dev
 ```
 
-Requires Node 18+. Uses Tailwind 4 via the `@tailwindcss/vite` plugin — no `tailwind.config.js` needed.
+Requires Node 18+. Uses Tailwind 4 via `@tailwindcss/vite` — no `tailwind.config.js` needed.
 
 ## Stack
 
