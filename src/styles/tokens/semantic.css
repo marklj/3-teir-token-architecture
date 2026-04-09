@@ -1,9 +1,11 @@
 /* ── Tier 2: Semantic tokens ─────────────────────────────────────────────
-   Step 1 — define tokens in :root so dark mode and brand scopes can
-            override them with higher specificity.
-   Step 2 — re-declare in @theme inline so Tailwind generates utilities
-            that reference the var (not bake the value), keeping them
-            live at runtime.
+   Colors use a two-step pattern (see below). This is load-bearing:
+   collapsing it to a single @theme inline block bakes the primitive value
+   into the utility at build time, breaking dark mode and brand overrides.
+
+   Type and spacing use @theme inline only for utility generation. They
+   could use plain @theme (no self-reference) since they never change at
+   runtime — @theme inline here is a consistency choice, not a requirement.
    ──────────────────────────────────────────────────────────────────────── */
 
 :root {

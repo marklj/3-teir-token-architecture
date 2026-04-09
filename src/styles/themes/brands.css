@@ -1,15 +1,7 @@
 /* ── Multi-brand theming ───────────────────────────────────────────────────
-   Named hue/chroma vars let you reference any brand's raw values directly
-   (e.g. oklch(0.60 var(--emerald-chroma) var(--emerald-hue))) without
-   needing a data-brand scope on the element.
+   Hue/chroma primitives live in primitives.css. These rules assign them
+   to the driver vars when a brand scope is active on an ancestor element.
    ──────────────────────────────────────────────────────────────────────── */
-
-:root {
-  --red-hue:     25;   --red-chroma:     0.26;
-  --emerald-hue: 160;  --emerald-chroma: 0.18;
-  --rose-hue:    10;   --rose-chroma:    0.22;
-  --amber-hue:   75;   --amber-chroma:   0.20;
-}
 
 [data-brand="red"]     { --brand-hue: var(--red-hue);     --brand-chroma: var(--red-chroma); }
 [data-brand="emerald"] { --brand-hue: var(--emerald-hue); --brand-chroma: var(--emerald-chroma); }

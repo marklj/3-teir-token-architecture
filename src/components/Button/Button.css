@@ -1,0 +1,40 @@
+@layer components {
+  .btn-primary {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.375em;
+    padding: 0.5em 1.25em;
+    border-radius: var(--radius-md);
+    font-weight: 600;
+    font-size: var(--text-sm);
+    background: var(--color-interactive);
+    color: var(--color-text-on-brand);
+    border: none;
+    cursor: pointer;
+    transition: background 150ms ease;
+
+    &:hover { background: var(--color-interactive-hover); }
+    &:focus-visible { outline: 2px solid var(--color-interactive); outline-offset: 2px; }
+  }
+
+  .btn-ghost {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.375em;
+    padding: 0.5em 1.25em;
+    border-radius: var(--radius-md);
+    font-weight: 500;
+    font-size: var(--text-sm);
+    background: transparent;
+    color: var(--color-interactive);
+    border: 1.5px solid var(--color-interactive-border);
+    cursor: pointer;
+    transition: background 150ms ease, border-color 150ms ease;
+
+    &:hover {
+      background: var(--color-interactive-subtle);
+      border-color: var(--color-interactive);
+    }
+    &:focus-visible { outline: 2px solid var(--color-interactive); outline-offset: 2px; }
+  }
+}

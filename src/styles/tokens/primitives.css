@@ -28,6 +28,20 @@
   --neutral-95: oklch(0.96 0.003 var(--brand-hue));
   --neutral-98: oklch(0.99 0.002 var(--brand-hue));
 
+  /* Border radius scale */
+  --radius-sm:   0.375rem;
+  --radius-md:   0.5rem;
+  --radius-lg:   0.75rem;
+  --radius-xl:   1rem;
+  --radius-full: 9999px;
+
+  /* Named brand hue/chroma — referenced by brands.css [data-brand] rules
+     and usable directly when you need a specific brand color without a scope */
+  --red-hue:     25;   --red-chroma:     0.26;
+  --emerald-hue: 160;  --emerald-chroma: 0.18;
+  --rose-hue:    10;   --rose-chroma:    0.22;
+  --amber-hue:   75;   --amber-chroma:   0.20;
+
   /* Success / warning / danger */
   --green-60: oklch(0.60 0.18 145);
   --green-85: oklch(0.85 0.10 145);
