@@ -1,0 +1,105 @@
+/* ── Tier 2: Semantic tokens ─────────────────────────────────────────────
+   Step 1 — define tokens in :root so dark mode and brand scopes can
+            override them with higher specificity.
+   Step 2 — re-declare in @theme inline so Tailwind generates utilities
+            that reference the var (not bake the value), keeping them
+            live at runtime.
+   ──────────────────────────────────────────────────────────────────────── */
+
+:root {
+  /* Surfaces */
+  --color-canvas:         var(--neutral-98);
+  --color-surface:        var(--neutral-95);
+  --color-surface-raised: oklch(1 0 0);
+  --color-surface-sunken: var(--neutral-90);
+
+  /* Text */
+  --color-text:          var(--neutral-10);
+  --color-text-muted:    var(--neutral-50);
+  --color-text-on-brand: oklch(1 0 0);
+
+  /* Interactive */
+  --color-interactive:        var(--brand-60);
+  --color-interactive-hover:  var(--brand-50);
+  --color-interactive-subtle: var(--brand-95);
+  --color-interactive-border: var(--brand-85);
+
+  /* Borders */
+  --color-border:        var(--neutral-90);
+  --color-border-strong: var(--neutral-70);
+
+  /* Status */
+  --color-success:        var(--green-60);
+  --color-success-subtle: var(--green-85);
+  --color-warning:        var(--amber-60);
+  --color-warning-subtle: var(--amber-90);
+  --color-danger:         var(--red-55);
+  --color-danger-subtle:  var(--red-90);
+
+  --color-focus: var(--brand-60);
+
+  /* ── Fluid type scale ──────────────────────────────────────────────────── */
+  --text-xs:   clamp(0.6875rem, 0.65rem + 0.2vw,  0.75rem);
+  --text-sm:   clamp(0.75rem,   0.70rem + 0.25vw,  0.875rem);
+  --text-base: clamp(1rem,      0.92rem + 0.4vw,   1.125rem);
+  --text-lg:   clamp(1.125rem,  1.0rem  + 0.6vw,   1.375rem);
+  --text-xl:   clamp(1.25rem,   1.1rem  + 0.75vw,  1.5rem);
+  --text-2xl:  clamp(1.5rem,    1.25rem + 1.25vw,  2rem);
+  --text-3xl:  clamp(1.875rem,  1.5rem  + 1.875vw, 2.5rem);
+  --text-4xl:  clamp(2.25rem,   1.75rem + 2.5vw,   3.5rem);
+  --text-5xl:  clamp(2.75rem,   2rem    + 3.75vw,  5rem);
+
+  /* ── Fluid spacing scale ───────────────────────────────────────────────── */
+  --spacing-xs:      clamp(0.25rem, 0.2rem  + 0.25vw, 0.5rem);
+  --spacing-sm:      clamp(0.5rem,  0.4rem  + 0.5vw,  0.75rem);
+  --spacing-md:      clamp(0.75rem, 0.6rem  + 0.75vw, 1.25rem);
+  --spacing-lg:      clamp(1rem,    0.8rem  + 1vw,    1.75rem);
+  --spacing-xl:      clamp(1.5rem,  1rem    + 2.5vw,  3rem);
+  --spacing-2xl:     clamp(2rem,    1.25rem + 3.75vw, 5rem);
+  --spacing-section: clamp(3rem,    2rem    + 5vw,    8rem);
+}
+
+/* ── Tailwind bridge ─────────────────────────────────────────────────────
+   Self-references tell Tailwind: "generate a utility that reads this var
+   at runtime" rather than baking the resolved value at build time.
+   ──────────────────────────────────────────────────────────────────────── */
+@theme inline {
+  --color-canvas:             var(--color-canvas);
+  --color-surface:            var(--color-surface);
+  --color-surface-raised:     var(--color-surface-raised);
+  --color-surface-sunken:     var(--color-surface-sunken);
+  --color-text:               var(--color-text);
+  --color-text-muted:         var(--color-text-muted);
+  --color-text-on-brand:      var(--color-text-on-brand);
+  --color-interactive:        var(--color-interactive);
+  --color-interactive-hover:  var(--color-interactive-hover);
+  --color-interactive-subtle: var(--color-interactive-subtle);
+  --color-interactive-border: var(--color-interactive-border);
+  --color-border:             var(--color-border);
+  --color-border-strong:      var(--color-border-strong);
+  --color-success:            var(--color-success);
+  --color-success-subtle:     var(--color-success-subtle);
+  --color-warning:            var(--color-warning);
+  --color-warning-subtle:     var(--color-warning-subtle);
+  --color-danger:             var(--color-danger);
+  --color-danger-subtle:      var(--color-danger-subtle);
+  --color-focus:              var(--color-focus);
+
+  --text-xs:   var(--text-xs);
+  --text-sm:   var(--text-sm);
+  --text-base: var(--text-base);
+  --text-lg:   var(--text-lg);
+  --text-xl:   var(--text-xl);
+  --text-2xl:  var(--text-2xl);
+  --text-3xl:  var(--text-3xl);
+  --text-4xl:  var(--text-4xl);
+  --text-5xl:  var(--text-5xl);
+
+  --spacing-xs:      var(--spacing-xs);
+  --spacing-sm:      var(--spacing-sm);
+  --spacing-md:      var(--spacing-md);
+  --spacing-lg:      var(--spacing-lg);
+  --spacing-xl:      var(--spacing-xl);
+  --spacing-2xl:     var(--spacing-2xl);
+  --spacing-section: var(--spacing-section);
+}

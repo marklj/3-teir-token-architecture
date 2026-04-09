@@ -1,0 +1,27 @@
+/* ── Dark mode: swap semantic tokens to dark-appropriate primitives ────────
+   Class-based only so the demo toggle works regardless of OS preference.
+   Initialize darkMode state from matchMedia in JS to respect OS preference.
+   ──────────────────────────────────────────────────────────────────────── */
+
+:root.dark {
+  --color-canvas:         var(--neutral-05);
+  --color-surface:        var(--neutral-10);
+  --color-surface-raised: var(--neutral-20);
+  --color-surface-sunken: oklch(0.08 0.010 var(--brand-hue));
+
+  --color-text:           var(--neutral-95);
+  --color-text-muted:     var(--neutral-70);
+  --color-text-on-brand:  oklch(1 0 0);
+
+  --color-interactive:        var(--brand-70);
+  --color-interactive-hover:  var(--brand-85);
+  --color-interactive-subtle: var(--neutral-20);
+  --color-interactive-border: var(--brand-30);
+
+  --color-border:        var(--neutral-20);
+  --color-border-strong: var(--neutral-30);
+
+  --color-success-subtle: oklch(0.20 0.08 145);
+  --color-warning-subtle: oklch(0.22 0.08 75);
+  --color-danger-subtle:  oklch(0.22 0.08 25);
+}

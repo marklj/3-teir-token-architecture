@@ -1,0 +1,38 @@
+/* ── Tier 1: Primitives ────────────────────────────────────────────────────
+   Raw perceptual oklch values. Never referenced in HTML directly.
+   These are the atoms from which semantic tokens are composed.
+   ──────────────────────────────────────────────────────────────────────── */
+
+:root {
+  /* Brand hue/chroma drivers — change these to shift the whole palette */
+  --brand-hue: 25;
+  --brand-chroma: 0.26;
+
+  /* Brand scale — derived from hue/chroma drivers */
+  --brand-10:  oklch(0.15 calc(var(--brand-chroma) * 0.5) var(--brand-hue));
+  --brand-30:  oklch(0.35 calc(var(--brand-chroma) * 0.8) var(--brand-hue));
+  --brand-50:  oklch(0.55 var(--brand-chroma) var(--brand-hue));
+  --brand-60:  oklch(0.60 var(--brand-chroma) var(--brand-hue));
+  --brand-70:  oklch(0.70 calc(var(--brand-chroma) * 0.9) var(--brand-hue));
+  --brand-85:  oklch(0.85 calc(var(--brand-chroma) * 0.5) var(--brand-hue));
+  --brand-95:  oklch(0.95 calc(var(--brand-chroma) * 0.2) var(--brand-hue));
+
+  /* Neutral scale — very low chroma, follows brand hue for harmony */
+  --neutral-05: oklch(0.10 0.010 var(--brand-hue));
+  --neutral-10: oklch(0.18 0.010 var(--brand-hue));
+  --neutral-20: oklch(0.25 0.008 var(--brand-hue));
+  --neutral-30: oklch(0.35 0.008 var(--brand-hue));
+  --neutral-50: oklch(0.50 0.006 var(--brand-hue));
+  --neutral-70: oklch(0.70 0.005 var(--brand-hue));
+  --neutral-90: oklch(0.90 0.004 var(--brand-hue));
+  --neutral-95: oklch(0.96 0.003 var(--brand-hue));
+  --neutral-98: oklch(0.99 0.002 var(--brand-hue));
+
+  /* Success / warning / danger */
+  --green-60: oklch(0.60 0.18 145);
+  --green-85: oklch(0.85 0.10 145);
+  --amber-60: oklch(0.65 0.18 75);
+  --amber-90: oklch(0.90 0.10 75);
+  --red-55:   oklch(0.55 0.22 25);
+  --red-90:   oklch(0.90 0.10 25);
+}

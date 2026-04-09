@@ -1,0 +1,21 @@
+@import "tailwindcss";
+
+/* ── Three-tier token architecture ────────────────────────────────────────
+   Tier 1: primitives.css   — raw oklch values, never in HTML
+   Tier 2: semantic.css     — purpose tokens + @theme inline bridge
+   Tier 3: Tailwind classes — generated from @theme inline references
+   ──────────────────────────────────────────────────────────────────────── */
+
+@import "./styles/tokens/primitives.css";
+@import "./styles/tokens/semantic.css";
+@import "./styles/themes/dark.css";
+@import "./styles/themes/brands.css";
+@import "./styles/components.css";
+
+@layer base {
+  body {
+    background: var(--color-canvas);
+    color: var(--color-text);
+    transition: background 200ms ease, color 200ms ease;
+  }
+}
